@@ -1,8 +1,8 @@
-import java.util.Locale;
 import java.util.Scanner;
+import java.io.File;
+import java.util.List;
 
 class Menu extends AddressBook{
-
     Scanner scan = new Scanner(System.in);
     AddressBook addressBook = new AddressBook();
 
@@ -31,13 +31,16 @@ class Menu extends AddressBook{
                     System.out.println("Enter file name: ");
                     String filename = scan.nextLine();
                     addressBook.readFromFile(filename);
-                    System.out.println("Read in " + addressEntryList.size() + " new addresses, successfully loaded, currently " + addressEntryList.size() + " addresses.\n");
                     break;
                 case 2:
                     addMenu();
                     break;
                 case 3:
+                    removeMenu();
+                    break;
                 case 4:
+                    findMenu();
+                    break;
                 case 5:
                     addressBook.list();
                     System.out.println("\n");
@@ -76,23 +79,64 @@ class Menu extends AddressBook{
         int zip = scan.nextInt();
         scan.nextLine();
 
-        prompt_Phone();
-        String phone = scan.nextLine();
-
         prompt_Email();
         String email = scan.nextLine();
 
-        System.out.println("Thank you, the following contact has been added to your address book: \n");
+        prompt_Phone();
+        String phone = scan.nextLine();
 
         AddressEntry newEntry = new AddressEntry(first_name, last_name, street, city, state, zip, phone, email);
         addressBook.add(newEntry);
-        addressBook.list();
-        System.out.println("\n");
+        addressBook.sort();
+        System.out.println("Thank you, the following contact has been added to your address book:");
+        System.out.println(newEntry + "\n");
     }
 
-    public void List(){
+    /**
+     * A menu that will return the contacts with last name entered by user then ask
+     * which contact they wish to remove
+     */
+    public void removeMenu(){
+        String lastName;
+        int remove = 0;
+        System.out.println("Enter in the last name of the contact you want to remove:");
+        lastName = scan.nextLine();
 
+        List<AddressEntry> contactsFound = AddressBook.find(lastName);
+        if(contactsFound.size() >= 1){
+            int count = 1;
+            System.out.println("The following contacts were found. Please enter the number of the entry you wish to remove:");
+            for(AddressEntry entry: contactsFound){
+                System.out.println(count + ": " + entry);
+                count++;
+            }
+            try{
+                remove = scan.nextInt();
+            }
+            catch(NumberFormatException e){
+                System.out.println("Please enter a valid number.");
+            }
+            AddressBook.remove(contactsFound.get(remove - 1));
+            System.out.println("The contact has been removed.\n");
+        }
     }
+
+    public void findMenu(){
+        System.out.println("Enter in all or the beginning of the last name of the contact you wish to find:");
+        String lName = scan.nextLine();
+        System.out.println("The following entries were found:");
+
+        List<AddressEntry> contactsFound = AddressBook.find(lName);
+        if(contactsFound.size() >= 1){
+            for(AddressEntry entry : contactsFound){
+                System.out.println(entry);
+            }
+        }
+        else{
+            System.out.println("No entries were found.");
+        }
+    }
+
 
     /**
      * prompt_FirstName  generates a standard output prompt for the First Name to be entered
@@ -147,6 +191,6 @@ class Menu extends AddressBook{
      * prompt_Email generates a standard output prompt for the Email to be entered
      */
     public static void prompt_Email(){
-        System.out.print("Email: ");
+        System.out.println("Email: ");
     }
 }

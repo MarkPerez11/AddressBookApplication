@@ -14,3 +14,27 @@ Ca
 99999
 bg@gmail.com
 415-389-1239
+Mark
+Perez
+Monterey Rd
+San Jose
+Ca
+95111
+mp@gmail.com
+408-123-4567
+Michelle
+Perez
+Story Rd
+San Jose
+Ca
+95123
+michp@gmail.com
+669-238-0000
+Jose
+Perez
+King rd
+Milpitas
+Ca
+95127
+jp@gmail.com
+669-111-7006
